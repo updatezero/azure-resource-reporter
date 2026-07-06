@@ -3,6 +3,7 @@ import json
 
 RESOURCE_FILE = "data/azure_resources.json"
 REPORT_FILE = "azure_report.csv"
+REPORT_MD_FILE = "azure_report.md"
 REQUIRED_TAGS = [
     "owner",
     "cost_center",
@@ -244,6 +245,77 @@ def export_to_csv(resources):
     print(f"\nAzure report exported successfully to {REPORT_FILE}")
 
 
+def build_markdown_report(resources):
+    lines = ["# Azure Resource Report", ""]
+
+    total_resources = len(resources)
+    findings = build_security_findings(resources)
+    compliant_resources = 0
+    non_compliant_resources = 0
+
+    for resource in resources:
+        if get_missing_tags(resource):
+            non_compliant_resources += 1
+        else:
+            compliant_resources += 1
+
+    lines.append("## Summary")
+    lines.append("")
+    lines.append(f"- Total Resources: {total_resources}")
+    lines.append(f"- Tag Compliant: {compliant_resources}")
+    lines.append(f"- Tag Non-Compliant: {non_compliant_resources}")
+    lines.append(f"- Security Findings: {len(findings)}")
+    lines.append(f"  - High: {count_findings_by_severity(findings, 'High')}")
+    lines.append(f"  - Medium: {count_findings_by_severity(findings, 'Medium')}")
+    lines.append(f"  - Low: {count_findings_by_severity(findings, 'Low')}")
+    lines.append("")
+
+    lines.append("## Resources")
+    lines.append("")
+    lines.append("| Name | Type | Resource Group | Location | Environment | Status |")
+    lines.append("|------|------|-----------------|----------|-------------|--------|")
+
+    for resource in resources:
+        lines.append(
+            f"| {resource['name']} | {resource['resource_type']} | "
+            f"{resource['resource_group']} | {resource['location']} | "
+            f"{resource['environment']} | {resource['status']} |"
+        )
+
+    lines.append("")
+
+    lines.append("## Security Findings")
+    lines.append("")
+
+    if not findings:
+        lines.append("No security findings.")
+    else:
+        for finding in findings:
+            lines.append(
+                f"- **{finding['severity']}** – {finding['resource_name']}: "
+                f"{finding['finding']}"
+            )
+
+    lines.append("")
+
+    return "\n".join(lines)
+
+
+def export_to_markdown(resources):
+    print("\n=== Export Azure Report (Markdown) ===")
+
+    if not resources:
+        print("No resources found.")
+        return
+
+    report = build_markdown_report(resources)
+
+    with open(REPORT_MD_FILE, "w") as file:
+        file.write(report)
+
+    print(f"\nAzure report exported successfully to {REPORT_MD_FILE}")
+
+
 def main():
     resources = load_resources()
 
@@ -259,7 +331,8 @@ def main():
         print("5. Check Tag Compliance")
         print("6. Show Security Findings")
         print("7. Export to CSV")
-        print("8. Exit")
+        print("8. Export to Markdown")
+        print("9. Exit")
 
         choice = input("\nChoose an option: ")
 
@@ -285,6 +358,9 @@ def main():
             export_to_csv(resources)
 
         elif choice == "8":
+            export_to_markdown(resources)
+
+        elif choice == "9":
             print("\nGoodbye!")
             break
 

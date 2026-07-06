@@ -1,3 +1,5 @@
 __pycache__/
 *.py[cod]
 azure_report.csv
+azure_report.md
+*.code-workspace
