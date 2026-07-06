@@ -39,7 +39,7 @@ No external packages are required. The project uses Python standard library modu
 Clone the repository:
 
 ```bash
-git clone https://github.com/YOUR-USERNAME/azure-resource-reporter.git
+git clone https://github.com/updatezero/azure-resource-reporter.git
 cd azure-resource-reporter
 ```
 
