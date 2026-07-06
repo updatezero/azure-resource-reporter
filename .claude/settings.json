@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pip3 show *)",
+      "Bash(pip3 list)",
+      "Bash(pip3 freeze)",
+      "Bash(az account show)",
+      "Bash(az account list)",
+      "Bash(az group list)",
+      "Bash(az group show *)",
+      "Bash(az resource list*)"
+    ]
+  }
+}

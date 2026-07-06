@@ -1,5 +1,8 @@
 import csv
 import json
+import os
+
+from azure_client import fetch_live_resources
 
 RESOURCE_FILE = "data/azure_resources.json"
 REPORT_FILE = "azure_report.csv"
@@ -22,6 +25,16 @@ RESOURCE_FIELDS = [
 
 
 def load_resources():
+    subscription_id = os.environ.get("AZURE_SUBSCRIPTION_ID")
+
+    if subscription_id:
+        try:
+            print(f"\nFetching live resources from Azure subscription {subscription_id}...")
+            return fetch_live_resources(subscription_id)
+        except Exception as error:
+            print(f"\nCould not fetch live Azure resources: {error}")
+            print("Falling back to local sample data.")
+
     try:
         with open(RESOURCE_FILE, "r") as file:
             return json.load(file)

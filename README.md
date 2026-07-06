@@ -1,12 +1,12 @@
 # Azure Resource Reporter
 
-A Python command-line reporting tool for Azure-style cloud resources.
+A Python command-line reporting tool for Azure cloud resources.
 
-The project uses sample JSON data to simulate Azure resources and generate simple reports. It is designed as a practical automation project for Cloud Engineering, Azure administration, and Cloud Security learning.
+The project can connect to a real Azure subscription via the Azure SDK and report on live resources (resource groups, VMs, storage accounts, VNets, and more), including real VM power state. If no Azure subscription is configured, it falls back to local sample JSON data, so the tool always runs standalone. It is designed as a practical automation project for Cloud Engineering, Azure administration, and Cloud Security learning.
 
 ## Features
 
-- Load Azure-style resource data from JSON
+- Load resources live from an Azure subscription via the Azure SDK, with automatic fallback to local sample JSON data
 - Show all resources
 - Filter resources by type
 - Filter resources by Azure location
@@ -14,6 +14,7 @@ The project uses sample JSON data to simulate Azure resources and generate simpl
 - Check tag compliance
 - Show security findings
 - Export resources to CSV
+- Export a full report to Markdown
 
 ## Resource Fields
 
@@ -30,11 +31,13 @@ Each resource contains:
 ## Requirements
 
 - Python 3
+- [Azure CLI](https://learn.microsoft.com/cli/azure/install-azure-cli) (only needed for live mode, to authenticate via `az login`)
 
-No external packages are required. The project uses Python standard library modules:
+Python dependencies are listed in `requirements.txt`:
 
-- `json`
-- `csv`
+- `azure-identity`
+- `azure-mgmt-resource`
+- `azure-mgmt-compute`
 
 ## Installation
 
@@ -43,13 +46,31 @@ Clone the repository:
 ```bash
 git clone https://github.com/updatezero/azure-resource-reporter.git
 cd azure-resource-reporter
+pip3 install -r requirements.txt
 ```
 
-Run the application:
+Run the application with local sample data:
 
 ```bash
 python3 main.py
 ```
+
+### Live mode (real Azure subscription)
+
+Authenticate once via the Azure CLI:
+
+```bash
+az login
+```
+
+Then set your subscription ID as an environment variable before running:
+
+```bash
+export AZURE_SUBSCRIPTION_ID=<your-subscription-id>
+python3 main.py
+```
+
+If authentication fails or no subscription ID is set, the tool automatically falls back to the local sample data in `data/azure_resources.json`.
 
 ## Usage
 
@@ -61,7 +82,8 @@ python3 main.py
 5. Check Tag Compliance
 6. Show Security Findings
 7. Export to CSV
-8. Exit
+8. Export to Markdown
+9. Exit
 ```
 
 ## Example Summary
@@ -131,20 +153,21 @@ azure-resource-reporter/
 |-- data/
 |   `-- azure_resources.json
 |-- main.py
+|-- azure_client.py
+|-- requirements.txt
 |-- .gitignore
 `-- README.md
 ```
 
 ## Why This Project Matters
 
-Cloud Engineers often need to collect, filter, and report cloud resource information. This project practices those same ideas with a simple local dataset before connecting to real Azure APIs or Azure CLI output.
+Cloud Engineers need to collect, filter, and report on real cloud resource state — spotting missing tags, ungoverned resource groups, and security findings across a subscription. This project does that against a real Azure subscription via the Azure SDK (`azure-identity` + `azure-mgmt-resource` + `azure-mgmt-compute`), while still working standalone against local sample data for anyone without Azure access.
 
 ## Roadmap
 
 Possible future improvements:
 
 - Add command-line arguments
-- Add Azure CLI JSON import
-- Add Azure SDK integration
 - Export security findings to CSV
 - Add automated tests
+- Expand live resource fields (e.g. real environment detection via Azure Policy/Management Groups)
