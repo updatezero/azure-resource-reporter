@@ -1,0 +1,47 @@
+[
+    {
+        "name": "vm-prod-web-01",
+        "resource_type": "Virtual Machine",
+        "resource_group": "rg-prod-web",
+        "location": "switzerlandnorth",
+        "subscription": "prod-subscription",
+        "environment": "production",
+        "status": "running"
+    },
+    {
+        "name": "vm-dev-app-01",
+        "resource_type": "Virtual Machine",
+        "resource_group": "rg-dev-app",
+        "location": "westeurope",
+        "subscription": "dev-subscription",
+        "environment": "development",
+        "status": "stopped"
+    },
+    {
+        "name": "stprodlogs001",
+        "resource_type": "Storage Account",
+        "resource_group": "rg-prod-logging",
+        "location": "switzerlandnorth",
+        "subscription": "prod-subscription",
+        "environment": "production",
+        "status": "active"
+    },
+    {
+        "name": "kv-prod-core-01",
+        "resource_type": "Key Vault",
+        "resource_group": "rg-prod-security",
+        "location": "switzerlandnorth",
+        "subscription": "prod-subscription",
+        "environment": "production",
+        "status": "active"
+    },
+    {
+        "name": "sql-dev-reporting-01",
+        "resource_type": "SQL Database",
+        "resource_group": "rg-dev-data",
+        "location": "westeurope",
+        "subscription": "dev-subscription",
+        "environment": "development",
+        "status": "active"
+    }
+]
