@@ -3,6 +3,11 @@ import json
 
 RESOURCE_FILE = "data/azure_resources.json"
 REPORT_FILE = "azure_report.csv"
+REQUIRED_TAGS = [
+    "owner",
+    "cost_center",
+    "environment"
+]
 
 RESOURCE_FIELDS = [
     "name",
@@ -119,6 +124,36 @@ def show_summary(resources):
         print(f"- {resource_type}: {count}")
 
 
+def check_tag_compliance(resources):
+    print("\n=== Tag Compliance Check ===")
+
+    if not resources:
+        print("No resources found.")
+        return
+
+    compliant_resources = 0
+    non_compliant_resources = 0
+
+    for resource in resources:
+        tags = resource.get("tags", {})
+        missing_tags = []
+
+        for required_tag in REQUIRED_TAGS:
+            if required_tag not in tags:
+                missing_tags.append(required_tag)
+
+        if missing_tags:
+            non_compliant_resources += 1
+            print(f"\nResource: {resource['name']}")
+            print(f"Missing tags: {', '.join(missing_tags)}")
+        else:
+            compliant_resources += 1
+
+    print("\nCompliance Summary")
+    print(f"Compliant Resources: {compliant_resources}")
+    print(f"Non-Compliant Resources: {non_compliant_resources}")
+
+
 def export_to_csv(resources):
     print("\n=== Export Azure Report ===")
 
@@ -147,8 +182,9 @@ def main():
         print("2. Filter by Resource Type")
         print("3. Filter by Location")
         print("4. Show Summary")
-        print("5. Export to CSV")
-        print("6. Exit")
+        print("5. Check Tag Compliance")
+        print("6. Export to CSV")
+        print("7. Exit")
 
         choice = input("\nChoose an option: ")
 
@@ -165,9 +201,12 @@ def main():
             show_summary(resources)
 
         elif choice == "5":
-            export_to_csv(resources)
+            check_tag_compliance(resources)
 
         elif choice == "6":
+            export_to_csv(resources)
+
+        elif choice == "7":
             print("\nGoodbye!")
             break
 

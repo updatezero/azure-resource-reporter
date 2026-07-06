@@ -11,6 +11,7 @@ The project uses sample JSON data to simulate Azure resources and generate simpl
 - Filter resources by type
 - Filter resources by Azure location
 - Show a summary report
+- Check tag compliance
 - Export resources to CSV
 
 ## Resource Fields
@@ -56,8 +57,9 @@ python3 main.py
 2. Filter by Resource Type
 3. Filter by Location
 4. Show Summary
-5. Export to CSV
-6. Exit
+5. Check Tag Compliance
+6. Export to CSV
+7. Exit
 ```
 
 ## Example Summary
@@ -75,6 +77,25 @@ Resources by Type:
 - Storage Account: 1
 - Key Vault: 1
 - SQL Database: 1
+```
+
+## Example Tag Compliance Check
+
+```text
+=== Tag Compliance Check ===
+
+Resource: vm-dev-app-01
+Missing tags: cost_center
+
+Resource: kv-prod-core-01
+Missing tags: owner
+
+Resource: sql-dev-reporting-01
+Missing tags: environment
+
+Compliance Summary
+Compliant Resources: 2
+Non-Compliant Resources: 3
 ```
 
 ## Project Structure
@@ -99,6 +120,5 @@ Possible future improvements:
 - Add command-line arguments
 - Add Azure CLI JSON import
 - Add Azure SDK integration
-- Add tag compliance checks
 - Add security-focused findings
 - Add automated tests

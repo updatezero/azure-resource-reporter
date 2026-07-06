@@ -6,7 +6,12 @@
         "location": "switzerlandnorth",
         "subscription": "prod-subscription",
         "environment": "production",
-        "status": "running"
+        "status": "running",
+        "tags": {
+            "owner": "web-team",
+            "cost_center": "cc-prod-001",
+            "environment": "production"
+        }
     },
     {
         "name": "vm-dev-app-01",
@@ -15,7 +20,11 @@
         "location": "westeurope",
         "subscription": "dev-subscription",
         "environment": "development",
-        "status": "stopped"
+        "status": "stopped",
+        "tags": {
+            "owner": "app-team",
+            "environment": "development"
+        }
     },
     {
         "name": "stprodlogs001",
@@ -24,7 +33,12 @@
         "location": "switzerlandnorth",
         "subscription": "prod-subscription",
         "environment": "production",
-        "status": "active"
+        "status": "active",
+        "tags": {
+            "owner": "platform-team",
+            "cost_center": "cc-prod-logging",
+            "environment": "production"
+        }
     },
     {
         "name": "kv-prod-core-01",
@@ -33,7 +47,11 @@
         "location": "switzerlandnorth",
         "subscription": "prod-subscription",
         "environment": "production",
-        "status": "active"
+        "status": "active",
+        "tags": {
+            "cost_center": "cc-prod-security",
+            "environment": "production"
+        }
     },
     {
         "name": "sql-dev-reporting-01",
@@ -42,6 +60,10 @@
         "location": "westeurope",
         "subscription": "dev-subscription",
         "environment": "development",
-        "status": "active"
+        "status": "active",
+        "tags": {
+            "owner": "data-team",
+            "cost_center": "cc-dev-002"
+        }
     }
 ]
