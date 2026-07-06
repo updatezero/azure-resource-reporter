@@ -135,12 +135,7 @@ def check_tag_compliance(resources):
     non_compliant_resources = 0
 
     for resource in resources:
-        tags = resource.get("tags", {})
-        missing_tags = []
-
-        for required_tag in REQUIRED_TAGS:
-            if required_tag not in tags:
-                missing_tags.append(required_tag)
+        missing_tags = get_missing_tags(resource)
 
         if missing_tags:
             non_compliant_resources += 1
@@ -152,6 +147,85 @@ def check_tag_compliance(resources):
     print("\nCompliance Summary")
     print(f"Compliant Resources: {compliant_resources}")
     print(f"Non-Compliant Resources: {non_compliant_resources}")
+
+
+def get_missing_tags(resource):
+    tags = resource.get("tags", {})
+    missing_tags = []
+
+    for required_tag in REQUIRED_TAGS:
+        if required_tag not in tags:
+            missing_tags.append(required_tag)
+
+    return missing_tags
+
+
+def build_security_findings(resources):
+    findings = []
+
+    for resource in resources:
+        missing_tags = get_missing_tags(resource)
+        environment = resource["environment"].lower()
+        resource_type = resource["resource_type"].lower()
+        status = resource["status"].lower()
+
+        if missing_tags:
+            severity = "Medium"
+
+            if environment == "production":
+                severity = "High"
+
+            findings.append({
+                "resource_name": resource["name"],
+                "severity": severity,
+                "finding": f"Missing required tags: {', '.join(missing_tags)}"
+            })
+
+        if resource_type == "virtual machine" and status == "stopped":
+            findings.append({
+                "resource_name": resource["name"],
+                "severity": "Low",
+                "finding": "Virtual machine is stopped"
+            })
+
+    return findings
+
+
+def show_security_findings(resources):
+    print("\n=== Security Findings Report ===")
+
+    if not resources:
+        print("No resources found.")
+        return
+
+    findings = build_security_findings(resources)
+
+    if not findings:
+        print("No security findings found.")
+        return
+
+    for index, finding in enumerate(findings, start=1):
+        print(f"\nFinding #{index}")
+        print("----------------------------------------")
+        print(f"Resource: {finding['resource_name']}")
+        print(f"Severity: {finding['severity']}")
+        print(f"Finding: {finding['finding']}")
+
+    print("\nFindings Summary")
+    print(f"Total Findings: {len(findings)}")
+    print(f"High: {count_findings_by_severity(findings, 'High')}")
+    print(f"Medium: {count_findings_by_severity(findings, 'Medium')}")
+    print(f"Low: {count_findings_by_severity(findings, 'Low')}")
+
+
+def count_findings_by_severity(findings, severity):
+    count = 0
+
+    for finding in findings:
+        if finding["severity"] == severity:
+            count += 1
+
+    return count
 
 
 def export_to_csv(resources):
@@ -183,8 +257,9 @@ def main():
         print("3. Filter by Location")
         print("4. Show Summary")
         print("5. Check Tag Compliance")
-        print("6. Export to CSV")
-        print("7. Exit")
+        print("6. Show Security Findings")
+        print("7. Export to CSV")
+        print("8. Exit")
 
         choice = input("\nChoose an option: ")
 
@@ -204,9 +279,12 @@ def main():
             check_tag_compliance(resources)
 
         elif choice == "6":
-            export_to_csv(resources)
+            show_security_findings(resources)
 
         elif choice == "7":
+            export_to_csv(resources)
+
+        elif choice == "8":
             print("\nGoodbye!")
             break
 

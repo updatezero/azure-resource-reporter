@@ -12,6 +12,7 @@ The project uses sample JSON data to simulate Azure resources and generate simpl
 - Filter resources by Azure location
 - Show a summary report
 - Check tag compliance
+- Show security findings
 - Export resources to CSV
 
 ## Resource Fields
@@ -58,8 +59,9 @@ python3 main.py
 3. Filter by Location
 4. Show Summary
 5. Check Tag Compliance
-6. Export to CSV
-7. Exit
+6. Show Security Findings
+7. Export to CSV
+8. Exit
 ```
 
 ## Example Summary
@@ -98,6 +100,30 @@ Compliant Resources: 2
 Non-Compliant Resources: 3
 ```
 
+## Example Security Findings
+
+```text
+=== Security Findings Report ===
+
+Finding #1
+----------------------------------------
+Resource: vm-dev-app-01
+Severity: Medium
+Finding: Missing required tags: cost_center
+
+Finding #2
+----------------------------------------
+Resource: vm-dev-app-01
+Severity: Low
+Finding: Virtual machine is stopped
+
+Findings Summary
+Total Findings: 4
+High: 1
+Medium: 2
+Low: 1
+```
+
 ## Project Structure
 
 ```text
@@ -120,5 +146,5 @@ Possible future improvements:
 - Add command-line arguments
 - Add Azure CLI JSON import
 - Add Azure SDK integration
-- Add security-focused findings
+- Export security findings to CSV
 - Add automated tests
