@@ -1,5 +1,7 @@
 # Azure Resource Reporter
 
+> **In plain English:** This program automatically looks into a Microsoft Cloud (Azure) account and lists everything running there — servers, storage, networks — then checks if anything is set up incorrectly or missing important labels, and writes a report about it.
+
 A Python command-line reporting tool for Azure cloud resources.
 
 The project can connect to a real Azure subscription via the Azure SDK and report on live resources (resource groups, VMs, storage accounts, VNets, and more), including real VM power state. If no Azure subscription is configured, it falls back to local sample JSON data, so the tool always runs standalone. It is designed as a practical automation project for Cloud Engineering, Azure administration, and Cloud Security learning.
