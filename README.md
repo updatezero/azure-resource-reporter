@@ -44,7 +44,7 @@ Python dependencies are listed in `requirements.txt`:
 Clone the repository:
 
 ```bash
-git clone https://github.com/updatezero/azure-resource-reporter.git
+git clone https://github.com/recica/azure-resource-reporter.git
 cd azure-resource-reporter
 pip3 install -r requirements.txt
 ```
