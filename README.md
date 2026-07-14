@@ -6,6 +6,8 @@ A Python command-line reporting tool for Azure cloud resources.
 
 The project can connect to a real Azure subscription via the Azure SDK and report on live resources (resource groups, VMs, storage accounts, VNets, and more), including real VM power state. If no Azure subscription is configured, it falls back to local sample JSON data, so the tool always runs standalone. It is designed as a practical automation project for Cloud Engineering, Azure administration, and Cloud Security learning.
 
+Its findings feed into [AI Security Assistant](https://github.com/recica/ai-security-assistant), which pulls together results from this tool and others into one prioritized summary.
+
 ## Features
 
 - Load resources live from an Azure subscription via the Azure SDK, with automatic fallback to local sample JSON data
